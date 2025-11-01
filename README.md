@@ -286,8 +286,30 @@ Widget build(BuildContext context) {
 }
 
 6. Jelaskan konsep "hot reload" di Flutter dan bagaimana bedanya dengan "hot restart".
+Dikutip dari laman geeksforgreeks.org, saat membangun aplikasi dart, dibutuhkan waktu untuk eksekusi pertama kali. Jadi untuk mengatasi masalah ini, flutter memiliki fitur Hot reload dan hot restart yang membantu mengirangi wkatu eksekusi. Keduanya jauh lebih baik dan lebih cepat dibanding restart standar biasa. Fitur ini juga hanya dapat digunakan jika telah menjalankan program minimal sekali.
+
 1) Hot Reload 
-adalah fitur di Flutter yang memungkinkan pengembang memperbarui tampilan aplikasi dengan cepat tanpa kehilangan data atau posisi halaman yang sedang aktif. Ketika kamu mengubah kode seperti warna, teks, atau tata letak (layout), lalu menekan tombol Hot Reload, Flutter hanya memperbarui bagian UI yang berubah tanpa memulai ulang aplikasi. Contohnya, jika kamu mengubah warna AppBar dari merah menjadi biru dan menekan Hot Reload, maka warna AppBar akan langsung berubah di layar tanpa mengulang dari halaman awal atau menghapus data yang sedang ditampilkan.
+adalah fitur di Flutter yang memungkinkan pengembang memperbarui tampilan aplikasi dengan cepat tanpa kehilangan data atau posisi halaman yang sedang aktif. Ketika mengubah kode seperti warna, teks, atau tata letak (layout), lalu menekan tombol Hot Reload, Flutter hanya memperbarui bagian UI yang berubah tanpa memulai ulang aplikasi. Contohnya, jika mengubah warna AppBar dari merah menjadi biru dan menekan Hot Reload, maka warna AppBar akan langsung berubah di layar tanpa mengulang dari halaman awal atau menghapus data yang sedang ditampilkan.
+
+- memungkinkan kita melihat perubahan yang tercermin setelah perbaikan bug, membangun antarmuka pengguna, dan bahkan menambahkan fitur tertentu ke aplikasi tanpa menjalankan aplikasi lagi dan lagi.
+
+- Saat Hot Reload dipanggil, mesin host memeriksa kode yang diedit sejak kompilasi terakhir dan mengompilasinya lagi.
+
+- Hot Reload tidak berfungsi saat tipe Enumerasi diubah ke Kelas reguler dan saat kelas diubah ke tipe enumerasi.
+
+- Hot Reload tidak berfungsi saat tipe generik dimodifikasi
 
 2) Hot restart 
-berbeda karena menjalankan ulang seluruh aplikasi dari awal dan menghapus semua data atau state yang tersimpan sementara. Fitur ini digunakan jika kamu mengubah logika awal aplikasi, variabel global, atau struktur widget utama yang tidak bisa diperbarui dengan Hot Reload. Contohnya, jika kamu mengubah nilai awal dari variabel counter di main() atau mengganti widget root dari MyApp menjadi NewApp, kamu harus menggunakan Hot Restart agar perubahan tersebut diterapkan secara penuh.
+berbeda karena menjalankan ulang seluruh aplikasi dari awal dan menghapus semua data atau state yang tersimpan sementara. Fitur ini digunakan jika ingin mengubah logika awal aplikasi, variabel global, atau struktur widget utama yang tidak bisa diperbarui dengan Hot Reload. Contohnya, jika mengubah nilai awal dari variabel counter di main() atau mengganti widget root dari MyApp menjadi NewApp, kamu harus menggunakan Hot Restart agar perubahan tersebut diterapkan secara penuh.
+
+Dikarenakan hot restart harus menghancurkan status aplikasi yang tersimpan dan kode harus dicompile ulang sepenuhnya, maka ia membutukan waktu lebih lama dibandingkan dengan hot reload, namun lebih singkat dibanding full restart.
+
+- Hot restart menghancurkan nilai Status yang dipertahankan dan mengaturnya ke default.
+
+- Hot Restart memerlukan waktu lebih lama daripada Hot Reload.
+
+- Hot reload juga dikenal sebagai 'stateful hot reload'
+
+- Hot Reload berguna karena menghemat waktu hanya dengan mengimplementasikan fungsionalitas berdasarkan kelas build terdekat dalam waktu kurang dari 10 detik.
+
+

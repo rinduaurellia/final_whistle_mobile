@@ -313,3 +313,198 @@ Dikarenakan hot restart harus menghancurkan status aplikasi yang tersimpan dan k
 - Hot Reload berguna karena menghemat waktu hanya dengan mengimplementasikan fungsionalitas berdasarkan kelas build terdekat dalam waktu kurang dari 10 detik.
 
 
+====================================== TUGAS 8 ============================================
+
+1. Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement() pada Flutter. Dalam kasus apa sebaiknya masing-masing digunakan pada aplikasi Football Shop kamu?
+
+Mengutip dari website dibimbing.id, Navigasi dalam aplikasi Flutter merujuk pada cara berpindah antar tampilan atau halaman dalam aplikasi yang memungkinkan pengguna untuk menjelajahi berbagai bagian aplikasi dengan mudah, seperti berpindah dari halaman utama ke halaman add product atau all product.
+
+Navigasi sendiri dilakukan menggunakan berbagai teknik dan widget, seperti Navigator, Drawer, dan BottomNavigatorBar yang memudahkan transisi antar halaman dengan cara yang mulus. Sedangkan navigator bekerja dengan cara memanipulasi stack (tumpukan) halaman yang artinya halaman baru dimasukkan ke atas stack sementara halaman sebelumnya disembunyikan.
+
+  1) Navigator.push()
+  Digunakan untuk menambahkan halaman baru ke atas stack navigasi. Halaman baru akan ditampilkan, sementara halaman sebelumnya tetap berada di bawah stack.
+  Contoh : 
+  (di product_card.dart)
+  if (item.name == "Add Product") {
+         Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductFormPage()),
+            );
+          }
+  Dalam kode ini, saat user menekan tombol 'Add Product', halaman baru akan muncul dengan transisi yang halus.
+  - User dapat menekan tombol back karena halaman sebelumnya masih ada di dalam stack.
+  - Cocok digunakan saat navigasi dari Home ke halaman tambah produk (karena mungkin kamu ingin user bisa menekan back untuk kembali).
+
+  2) Navigator.pushReplacement()
+  Digunakan untuk menggantikan halaman teratas dengan halaman baru, sehingga halaman sebelumnya tidak muncul dalam stack navigasi, dimana halaman lama akan terhapus dalam stack dan halaman abru akan menggantikan posisi halaman sebelumnya.
+  Contoh : 
+  ListTile(
+            leading: const Icon(Icons.home_outlined),
+            title: const Text('Home Page'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyHomePage(),
+                  ));
+            },
+          ),
+  Halaman lama akan dihapus dalam stack ketika memencet Home Page dan halaman Home Page alan menggantikan posisi halaman sebelumnya.
+  - User tidak dapat kembali ke halaman sebelumnya karena halaman telah dihapus dari stack.
+  - Cocok digunakan untuk navigasi dari Drawer (misalnya saat klik “Home Page” atau “Add Product”).
+    Karena ketika user menekan item di drawer, kamu memang ingin mengganti halaman sepenuhnya, bukan tumpuk di atas halaman lam
+
+2. Bagaimana kamu memanfaatkan hierarchy widget seperti Scaffold, AppBar, dan Drawer untuk membangun struktur halaman yang konsisten di seluruh aplikasi?
+
+Di Flutter, semua tampilan dibangun dari widget yang tersusun secara hierarkis (bertingkat). Artinya, setiap komponen UI berada di dalam komponen lain. Struktur ini seperti pohon (widget tree) — di mana widget paling luar mengatur tata letak widget di dalamnya. Hal ini memudahkan user maupun developer dalam memahami struktur kode, serta aplikasi terasa konsisten, teratur, dan mudah dipahami.
+
+A. Scaffold adalah rangka utama halaman flutter yang menyediakan stuktur data yang sudah umum dalam aplikasi Material Design (AppBar, Drawer, Body, FAB, dsb)
+Fungsi : 
+- Menjadi container halaman utama
+- Menjaga layout aantar halaman agar tetap seragam
+- Menyediakan area khusus untuk AppBar, Drawer, Body, FloatingActionButton, dsb.
+
+Contoh : 
+return Scaffold(
+  appBar: AppBar(
+    title: const Text('Final Whistle'),
+    backgroundColor: Colors.indigo,
+  ),
+  drawer: const LeftDrawer(),
+  body: ...
+);
+Disini Scaffold membungkus seluruh halaman utama (MyHomePage).
+Sehingga halaman form (ProductFormPage) dan halaman utama (MyHomePage) memiliki layout dasar yang sama.
+
+B. AppBar adalah bagian header di atas halaman aplikasi.
+Biasanya berisi judul halaman, ikon navigasi, atau aksi cepat (seperti tombol search atau refresh).
+Fungsi : 
+- Menunjukkan identitas halaman (judul seperti “Final Whistle” atau “Form Tambah Produk”).
+- Memberikan navigasi balik (back button) atau akses cepat.
+- Menambah kesan profesional karena setiap halaman punya header seragam.
+
+Contoh : 
+appBar: AppBar(
+  title: const Center(
+    child: Text('Form Tambah Produk'),
+  ),
+  backgroundColor: Colors.indigo,
+  foregroundColor: Colors.white,
+),
+Artinya, halaman form juga memiliki AppBar dengan warna dan gaya yang sama seperti halaman utama.
+Ini menjaga keseragaman tampilan (UI consistency) antar halaman.
+
+C. Drawer adalah menu navigasi samping (biasanya ditampilkan lewat ikon tiga garis ≡ di AppBar). Drawer memungkinkan pengguna berpindah antar halaman dengan cepat tanpa perlu kembali ke Home.
+Fungsi : 
+- Menjadi pusat navigasi utama aplikasi.
+- Menyediakan akses ke halaman-halaman penting seperti Home, Add Product, dll.
+- Menjaga user experience (UX) agar simpel dan intuitif.
+
+Contoh : 
+drawer: const LeftDrawer(),
+
+Dimana sesuai dengan kode yang ada, Drawer berfungsi seperti menu utama aplikasi
+yang memudahkan user berpindah antar halaman tanpa kehilangan konteks.
+
+Mengapa hierarki ini penting? 
+1) Menjaga aplikasi agar tetap konsisten : Setiap halaman memiliki AppBar & Drawer dengan tampilan seragam
+2) Mudah dipahami pengguna : pengguna tahu di mana posisi tombol & navigasi.
+3) Terstruktur: memisahkan bagian navigasi (Drawer) dan konten utama (Body) agar kode rapi.
+4) Efisien: cukup buat LeftDrawer satu kali → bisa dipakai di semua halaman lain.
+
+Dalam aplikasi Football Shop (Final Whistle), widget hierarchy dimanfaatkan untuk membangun struktur halaman yang konsisten di seluruh bagian aplikasi. Setiap halaman menggunakan Scaffold sebagai kerangka utama yang menyediakan area untuk AppBar, Drawer, dan Body. AppBar digunakan untuk menampilkan judul halaman seperti “Final Whistle” dan “Form Tambah Produk” agar pengguna mengetahui konteks halaman yang sedang dibuka. Drawer berfungsi sebagai menu navigasi utama yang memudahkan pengguna berpindah antar halaman, seperti ke Home atau ke halaman tambah produk. Dengan menerapkan struktur hierarki ini secara konsisten, setiap halaman memiliki tata letak dan tampilan yang seragam, sehingga meningkatkan kenyamanan, profesionalitas, dan kemudahan penggunaan aplikasi.
+
+3. Dalam konteks desain antarmuka, apa kelebihan menggunakan layout widget seperti Padding, SingleChildScrollView, dan ListView saat menampilkan elemen-elemen form? Berikan contoh penggunaannya dari aplikasi kamu.
+
+Dalam desain antarmuka (User Interface Design), tampilan yang nyaman, rapi, dan mudah diakses di semua ukuran layar adalah hal yang sangat penting.
+Flutter menyediakan berbagai layout widgets seperti Padding, SingleChildScrollView, dan ListView untuk mengatur posisi, jarak, dan perilaku elemen UI secara fleksibel.
+
+Ketiga widget ini membantu memastikan bahwa form input di aplikasi  tetap rapi dan mudah digunakan, bahkan saat form berisi banyak elemen atau dijalankan di perangkat dengan ukuran layar kecil.
+
+1) Widget Padding : 
+Padding digunakan untuk memberikan ruang (spasi) di sekitar suatu widget, agar elemen UI tidak menempel ke tepi layar atau ke widget lain. Tanpa padding, field akan terlalu menempel satu sama lain dan terkesan berantakan.
+Kelebihan : 
+- Membuat tampilan form lebih rapi dan proporsional.
+- Meningkatkan readability (mudah dibaca) dan usability (mudah digunakan).
+- Menjaga agar pengguna tidak salah sentuh antar field (terutama di layar kecil).
+
+Contoh : 
+Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: TextFormField(
+    decoration: InputDecoration(
+      hintText: "Nama Produk",
+      labelText: "Nama Produk",
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+    ),
+  ),
+)
+
+2) Widget SingleChildScrollView : 
+Memungkinkan halaman dapat digulir (scroll) secara vertikal ketika isi form melebihi tinggi layar.
+Kelebihan : 
+- Mencegah overflow error (“bottom overflowed by pixels”) pada layar kecil.
+- Memastikan semua elemen form dapat diakses tanpa menutupi tombol di bawah.
+- Memberikan pengalaman pengguna yang lebih baik, terutama saat keyboard muncul.
+
+Contoh : 
+body: Form(
+  key: _formKey,
+  child: SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Semua field form di sini
+        Padding(...),
+        Padding(...),
+        Padding(...),
+      ],
+    ),
+  ),
+)
+
+3) Widget ListView
+Widget yang menampilkan daftar elemen secara scrollable secara vertikal. Berbeda dengan SingleChildScrollView yang hanya punya satu child, ListView dirancang khusus untuk menampilkan banyak item dinamis.
+
+Kelebihan : 
+- Efisien untuk menampilkan daftar produk atau data form dinamis.
+- Otomatis dapat discroll tanpa pembungkus tambahan.
+- Dapat digunakan dengan builder untuk menampilkan data banyak tanpa lag.
+
+Dalam konteks desain antarmuka, penggunaan layout widget seperti Padding, SingleChildScrollView, dan ListView memiliki peran penting untuk menciptakan tampilan form yang nyaman dan responsif. Widget Padding digunakan untuk memberikan jarak antar elemen sehingga tampilan form menjadi rapi, seimbang, dan mudah dibaca. Sementara itu, SingleChildScrollView memungkinkan pengguna menggulir seluruh halaman form, sehingga setiap elemen dapat diakses meskipun layar perangkat berukuran kecil atau keyboard muncul. Sedangkan ListView digunakan untuk menampilkan daftar elemen yang panjang secara efisien dan otomatis dapat di-scroll.
+
+Pada aplikasi Final Whistle, ketiga widget ini digunakan pada halaman ProductFormPage agar pengguna dapat mengisi data produk dengan nyaman tanpa tampilan yang berdesakan atau terpotong. Kombinasi ini menciptakan pengalaman pengguna yang lebih baik, sekaligus menjaga estetika dan keteraturan antarmuka di seluruh halaman aplikasi.
+
+4. Bagaimana kamu menyesuaikan warna tema agar aplikasi Football Shop memiliki identitas visual yang konsisten dengan brand toko?
+
+Dalam desain antarmuka (User Interface Design), warna tema (color theme) berfungsi lebih dari sekadar estetika. Warna menjadi elemen penting dalam branding, emosi pengguna, dan konsistensi visual di seluruh aplikasi.
+
+Pada aplikasi Football Shop (Final Whistle), pemilihan warna bukan dilakukan secara acak, tetapi didesain agar merepresentasikan karakter toko olahraga yang dinamis dan profesional, memudahkan pengguna mengenali identitas merek, dan menciptakan pengalaman visual yang konsisten di setiap halaman aplikasi.
+
+Flutter menggunakan ThemeData untuk mengatur warna dan gaya visual secara global di seluruh aplikasi.
+Dengan ThemeData, kita tidak perlu mengatur warna satu per satu — cukup tentukan di root aplikasi (MaterialApp), lalu semua komponen seperti AppBar, Button, dan Drawer akan otomatis mengikuti warna utama brand.
+
+Pada Final Whistle ini terdapat di main.dart sendiri : 
+return MaterialApp(
+  title: 'Final Whistle',
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSwatch(
+      primarySwatch: Colors.indigo, // Warna utama brand
+    ).copyWith(
+      secondary: Colors.blueAccent, // Warna aksen tambahan
+    ),
+    scaffoldBackgroundColor: Colors.white,
+  ),
+  home: const MyHomePage(),
+);
+
+Jadi semua halaman dari HomePage hingga ProductForm menggunakan nuansa waena yang sama sehingga pengguna akan langsung merasa bahwa mereka masih di dalam satu aplikasi yang sama. Dimana AppBar akan berwarna indigo di setiap halaman, tombol Save juga dan drawer akan memiliki header berwarna biru dengan teks putih.
+
+Penyesuaikan warna tema di aplikasi Final Whistlesupaya tampilannya konsisten dan sesuai sama identitas brand toko.
+Warna utama yang aku pilih adalah indigo, karena warna ini memberikan kesan profesional, elegan, tapi tetap energik — cocok sama suasana dunia sepak bola dan toko olahraga.Aku pakai warna indigo ini secara konsisten di bagian penting seperti AppBar, tombol utama (Save), dan juga header pada Drawer, biar semua halaman punya nuansa yang sama.
+Latar belakangnya aku pilih putih supaya kontrasnya bagus dan teks mudah dibaca. Selain itutambahkan sedikit warna biru muda buat aksen, supaya nggak monoton tapi tetap nyatu dengan warna utama.
+
+Dengan cara ini, setiap halaman di aplikasi kelihatan selaras dan pengguna bisa langsung ngenalin brand toko cuma dari warna dan tampilannya — jadi kesannya lebih profesional dan punya identitas visual yang kuat.

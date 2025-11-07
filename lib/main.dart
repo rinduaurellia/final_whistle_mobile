@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:final_whistle_mobile/menu.dart';
+import 'package:final_whistle_mobile/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:final_whistle_mobile/menu.dart'; 
-import 'package:final_whistle_mobile/productlist_form.dart'; 
+import 'package:final_whistle_mobile/screens/menu.dart'; 
+import 'package:final_whistle_mobile/screens/productlist_form.dart'; 
 
 class ItemCard extends StatelessWidget {
   // Menampilkan kartu dengan ikon dan nama.

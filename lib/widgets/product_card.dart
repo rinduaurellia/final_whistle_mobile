@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:final_whistle_mobile/screens/menu.dart'; 
 import 'package:final_whistle_mobile/screens/productlist_form.dart'; 
+import 'package:final_whistle_mobile/screens/product_entry_list.dart';
+import 'package:final_whistle_mobile/screens/login.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:final_whistle_mobile/widgets/product_mylist.dart';
+
 
 class ItemCard extends StatelessWidget {
   // Menampilkan kartu dengan ikon dan nama.
@@ -11,15 +17,16 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Material(
       // Menentukan warna latar belakang dari tema aplikasi.
-      color: Theme.of(context).colorScheme.secondary,
+      color: item.color,
       // Membuat sudut kartu melengkung.
       borderRadius: BorderRadius.circular(12),
 
       child: InkWell(
         // Aksi ketika kartu ditekan.
-        onTap: () {
+        onTap: () async{
         // Memunculkan SnackBar ketika diklik
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
@@ -27,10 +34,18 @@ class ItemCard extends StatelessWidget {
               content: Text("Kamu telah menekan tombol ${item.name}!")));
 
         // Navigate ke route yang sesuai (tergantung jenis tombol)
-        if (item.name == "Add Product") {
+        if (item.name == "Create Product") {
          Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProductFormPage()),
+            );
+          } // Add this condition in your onTap handler
+          else if (item.name.toLowerCase().contains("my product")) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyProductListPage(),
+              ),
             );
           }
       },
